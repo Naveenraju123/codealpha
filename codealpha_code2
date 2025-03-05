@@ -1,0 +1,33 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.preprocessing import LabelEncoder, OrdinalEncoder # Import OrdinalEncoder
+
+data = pd.read_csv('/content/drive/MyDrive/medical_data.csv')
+print(data.head())
+
+# Print the columns of the DataFrame to check for the correct name
+print(data.columns)
+
+# Create a LabelEncoder object
+le = LabelEncoder()
+
+# List of categorical columns to encode
+# Make sure these column ncategorical_cols = ['Gender', 'Blood Type', 'Medical Condition']
+
+# Loop through categorical columns and apply Label Encoding
+for col in categorical_cols:
+    # Check if the column exists before trying to access it
+    if col in data.columns:
+        data[col] = le.fit_transform(data[col]) # Convert categorical columns to numerical
+    else:
+        print(f"Column '{col}' not found in DataFrame. Skipping...")
+
+# Handle the 'Last Checkup Date' column - Check if the column exists before proceeding
+if 'Last Checkup Date' in data.columns:
+    # Assuming it's a date, we'll convert it to ordinal values
+    # Convert to datetime object, handle errors, and ensure NaT values are replaced with a placeholder
+    data['Last Checkup Date'] = pd.to_datetime(data['Last Checkup Date'], errors='coerce').fillna(pd.Timestamp.min)
+    # Create an OrdinalEncoder
+    ordinal_encoder = OrdinalEncoder()
